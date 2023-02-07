@@ -71,7 +71,7 @@ func (h *ProductHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle GET Products")
 	products := GetProducts()
-	if err := products.ToJSON(w); err != nil {
+	if err := ToJSON(products, w); err != nil {
 		http.Error(w, "Unable to marshal json", http.StatusInternalServerError)
 	}
 }
@@ -79,7 +79,7 @@ func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 func (h *ProductHandler) AddProduct(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle POST Product")
 	product := &Product{}
-	if err := product.FromJSON(r.Body); err != nil {
+	if err := FromJSON(products, r.Body); err != nil {
 		http.Error(w, "Unable to marshal json", http.StatusBadRequest)
 	}
 	AddProduct(product)
@@ -88,7 +88,7 @@ func (h *ProductHandler) AddProduct(w http.ResponseWriter, r *http.Request) {
 func (h *ProductHandler) UpdateProduct(id int, w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle POST Product")
 	product := &Product{}
-	err := product.FromJSON(r.Body)
+	err := FromJSON(product, r.Body)
 	if err != nil {
 		http.Error(w, "Unable to marshal json", http.StatusBadRequest)
 	}
@@ -104,7 +104,7 @@ type KeyProduct struct{}
 func (h ProductHandler) MiddlewareValidateProduct(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		product := Product{}
-		if err := product.FromJSON(r.Body); err != nil {
+		if err := FromJSON(product, r.Body); err != nil {
 			h.l.Println("[ERROR] deserializing product", err)
 			http.Error(w, "Error reading product", http.StatusBadRequest)
 			return

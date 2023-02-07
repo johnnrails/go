@@ -47,7 +47,7 @@ func (h *ProductHandlerMux) GetIDFromPath(path string) (int, error) {
 func (h *ProductHandlerMux) GetProducts(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle GET Products")
 	products := GetProducts()
-	if err := products.ToJSON(w); err != nil {
+	if err := ToJSON(products, w); err != nil {
 		http.Error(w, "Unable to marshal json", http.StatusInternalServerError)
 	}
 }
@@ -79,13 +79,13 @@ func (h *ProductHandlerMux) UpdateProduct(w http.ResponseWriter, r *http.Request
 func (h ProductHandlerMux) MiddlewareValidateProduct(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		product := Product{}
-		if err := product.FromJSON(r.Body); err != nil {
+		if err := FromJSON(product, r.Body); err != nil {
 			h.l.Println("[ERROR] deserializing product", err)
 			http.Error(w, "Error reading product", http.StatusBadRequest)
 			return
 		}
-
-		if err := product.Validate(); err != nil {
+		validation := NewValidation()
+		if err := validation.Validate(product); err != nil {
 			h.l.Println("[ERROR] Validating product", err)
 			http.Error(w, fmt.Sprintf("Error validating product: %s", err), http.StatusBadRequest)
 			return
