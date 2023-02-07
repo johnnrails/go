@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -81,6 +82,12 @@ func (h ProductHandlerMux) MiddlewareValidateProduct(next http.Handler) http.Han
 		if err := product.FromJSON(r.Body); err != nil {
 			h.l.Println("[ERROR] deserializing product", err)
 			http.Error(w, "Error reading product", http.StatusBadRequest)
+			return
+		}
+
+		if err := product.Validate(); err != nil {
+			h.l.Println("[ERROR] Validating product", err)
+			http.Error(w, fmt.Sprintf("Error validating product: %s", err), http.StatusBadRequest)
 			return
 		}
 
