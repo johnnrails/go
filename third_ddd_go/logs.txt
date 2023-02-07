@@ -1,0 +1,3 @@
+2023/01/10 11:23:08 basic_log.go:15: This is my log message.
+2023/01/10 11:23:28 basic_log.go:15: This is my log message.
+2023/01/10 22:43:40 basic_log.go:21: This is my log message.
