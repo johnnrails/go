@@ -8,22 +8,19 @@ import (
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/go-chi/chi/v5"
-	"github.com/johnnrails/ddd_go/imersao12-full-cycle/internal/infra/akafka"
-	"github.com/johnnrails/ddd_go/imersao12-full-cycle/internal/infra/repositories/mysql"
-	"github.com/johnnrails/ddd_go/imersao12-full-cycle/internal/infra/web"
-	"github.com/johnnrails/ddd_go/imersao12-full-cycle/internal/usecases"
+	"github.com/johnnrails/ddd_go/imersao12-full-cycle/internal"
 )
 
 func main() {
 
 	r := chi.NewRouter()
-	r.Post("/products", web.CreateProductHandler)
-	r.Get("/products", web.ListAllProductsHandler)
+	r.Post("/products", internal.CreateProductHandler)
+	r.Get("/products", internal.ListAllProductsHandler)
 
 	go http.ListenAndServe(":8080", r)
 
 	msgChan := make(chan *kafka.Message)
-	go akafka.Consume([]string{"product"}, "localhost:9094", msgChan)
+	go internal.Consume([]string{"product"}, "localhost:9094", msgChan)
 
 	db, err := sql.Open("mysql", "...")
 	if err != nil {
@@ -32,14 +29,14 @@ func main() {
 	defer db.Close()
 
 	for msg := range msgChan {
-		input := usecases.CreateProductInput{}
+		input := internal.CreateProductInput{}
 		err := json.Unmarshal(msg.Value, &input)
 
 		if err != nil {
 		}
 
-		repository := mysql.NewProductRepositoryMySQL(db)
-		usecase := usecases.NewCreateProductUsecase(repository)
+		repository := internal.NewProductRepositoryMySQL(db)
+		usecase := internal.NewCreateProductUsecase(repository)
 
 		err = usecase.Execute(input)
 	}
