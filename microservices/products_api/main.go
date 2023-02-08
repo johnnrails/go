@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"time"
 
+	muxhandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/johnnrails/ddd_go/microservices/products_api/handlers"
 )
@@ -24,6 +25,7 @@ func main() {
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
 	getRouter.HandleFunc("/", ph.GetProducts)
+	getRouter.HandleFunc("/{id:[0-9]+}", ph.GetProduct)
 	getRouter.Use(ph.MiddlewareAddHeaders)
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
@@ -40,9 +42,10 @@ func main() {
 	deleteRouter.HandleFunc("/{id:[0-9]+}", ph.DeleteProduct)
 	deleteRouter.Use(ph.MiddlewareAddHeaders)
 
+	ch := muxhandlers.CORS(muxhandlers.AllowedOrigins([]string{"*"}))
 	s := http.Server{
 		Addr:         addr,              // configure the bind address
-		Handler:      sm,                // set the default handler
+		Handler:      ch(sm),            // set the default handler
 		ErrorLog:     l,                 // set the logger for the server
 		ReadTimeout:  5 * time.Second,   // max time to read request from the client
 		WriteTimeout: 10 * time.Second,  // max time to write response to the client
