@@ -2,11 +2,7 @@ package models
 
 import (
 	"fmt"
-	"net/http"
-	"strconv"
 	"time"
-
-	"github.com/gorilla/mux"
 )
 
 type Product struct {
@@ -42,15 +38,6 @@ var products = []*Product{
 
 func GetProducts() []*Product {
 	return products
-}
-
-func GetProductIDFromRequest(r *http.Request) int {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		panic(err)
-	}
-	return id
 }
 
 func AddProduct(p *Product) {
