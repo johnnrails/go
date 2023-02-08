@@ -30,7 +30,10 @@ func (h *ProductHandlerMux) GetProducts(w http.ResponseWriter, r *http.Request) 
 func (h *ProductHandlerMux) AddProduct(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle POST Product")
 	product := r.Context().Value(KeyProduct{}).(*models.Product)
-	models.AddProduct(product)
+	if err := models.AddProduct(product); err != nil {
+		http.Error(w, err.Error(), http.StatusConflict)
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (h *ProductHandlerMux) UpdateProduct(w http.ResponseWriter, r *http.Request) {
@@ -39,11 +42,22 @@ func (h *ProductHandlerMux) UpdateProduct(w http.ResponseWriter, r *http.Request
 	id := GetProductIDFromRequest(r)
 	product := r.Context().Value(KeyProduct{}).(models.Product)
 	if err := models.UpdateProduct(id, &product); err != nil {
-		http.Error(w, "Product Not Found", http.StatusNotFound)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
+	w.WriteHeader(http.StatusNoContent)
 }
+func (h *ProductHandlerMux) DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	h.l.Println("Handle PUT Product")
+	id := GetProductIDFromRequest(r)
+	if err := models.DeleteProductByID(id); err != nil {
+		h.l.Println("[ERROR] Product Not Found.")
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 
+}
 func GetProductIDFromRequest(r *http.Request) int {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
@@ -51,6 +65,13 @@ func GetProductIDFromRequest(r *http.Request) int {
 		panic(err)
 	}
 	return id
+}
+
+func (h ProductHandlerMux) MiddlewareAddHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+		next.ServeHTTP(w, r)
+	})
 }
 
 func (h ProductHandlerMux) MiddlewareValidateProduct(next http.Handler) http.Handler {

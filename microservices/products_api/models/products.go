@@ -80,9 +80,13 @@ func DeleteProductByID(id int) error {
 	return nil
 }
 
-func AddProduct(p *Product) {
+func AddProduct(p *Product) error {
+	if contains := Contains(p); contains {
+		return errors.New("Product already exists")
+	}
 	p.ID = getNextID()
 	products = append(products, p)
+	return nil
 }
 
 func UpdateProduct(id int, p *Product) error {
