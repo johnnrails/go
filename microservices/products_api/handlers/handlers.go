@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"context"
@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+
+	"github.com/johnnrails/ddd_go/microservices/products_api/helpers"
+	"github.com/johnnrails/ddd_go/microservices/products_api/models"
 )
 
 type ProductHandler struct {
@@ -70,29 +73,29 @@ func (h *ProductHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle GET Products")
-	products := GetProducts()
-	if err := ToJSON(products, w); err != nil {
+	products := models.GetProducts()
+	if err := helpers.ToJSON(products, w); err != nil {
 		http.Error(w, "Unable to marshal json", http.StatusInternalServerError)
 	}
 }
 
 func (h *ProductHandler) AddProduct(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle POST Product")
-	product := &Product{}
-	if err := FromJSON(products, r.Body); err != nil {
+	product := &models.Product{}
+	if err := helpers.FromJSON(product, r.Body); err != nil {
 		http.Error(w, "Unable to marshal json", http.StatusBadRequest)
 	}
-	AddProduct(product)
+	models.AddProduct(product)
 }
 
 func (h *ProductHandler) UpdateProduct(id int, w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle POST Product")
-	product := &Product{}
-	err := FromJSON(product, r.Body)
+	product := &models.Product{}
+	err := helpers.FromJSON(product, r.Body)
 	if err != nil {
 		http.Error(w, "Unable to marshal json", http.StatusBadRequest)
 	}
-	err = UpdateProduct(id, product)
+	err = models.UpdateProduct(id, product)
 	if err != nil {
 		http.Error(w, "Product Not Found", http.StatusNotFound)
 		return
@@ -103,8 +106,8 @@ type KeyProduct struct{}
 
 func (h ProductHandler) MiddlewareValidateProduct(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		product := Product{}
-		if err := FromJSON(product, r.Body); err != nil {
+		product := models.Product{}
+		if err := helpers.FromJSON(product, r.Body); err != nil {
 			h.l.Println("[ERROR] deserializing product", err)
 			http.Error(w, "Error reading product", http.StatusBadRequest)
 			return

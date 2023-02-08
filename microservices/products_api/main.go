@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/johnnrails/ddd_go/microservices/products_api/handlers"
 )
 
 var addr = ":9090"
@@ -17,7 +18,7 @@ func main() {
 	l := log.New(os.Stdout, "products-api", log.LstdFlags)
 
 	// create the handlers
-	ph := NewProductHandlerMux(l)
+	ph := handlers.NewProductHandlerMux(l)
 
 	sm := mux.NewRouter()
 

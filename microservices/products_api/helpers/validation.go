@@ -1,4 +1,4 @@
-package main
+package helpers
 
 import (
 	"fmt"
@@ -24,11 +24,9 @@ type ValidationErrors []ValidationError
 
 func (v ValidationErrors) Errors() []string {
 	errs := []string{}
-
 	for _, err := range v {
 		errs = append(errs, err.Error())
 	}
-
 	return errs
 }
 
@@ -54,6 +52,9 @@ func NewValidation() *Validation {
 }
 
 func (v *Validation) Validate(i interface{}) ValidationErrors {
+	if err := v.validate.Struct(i); err == nil {
+		return nil
+	}
 	errs := v.validate.Struct(i).(validator.ValidationErrors)
 
 	if len(errs) == 0 {
