@@ -23,6 +23,21 @@ func (h *ProductHandlerMux) GetProducts(w http.ResponseWriter, r *http.Request) 
 	h.l.Println("Handle GET Products")
 	products := models.GetProducts()
 	if err := helpers.ToJSON(products, w); err != nil {
+		h.l.Println(err.Error())
+		http.Error(w, "Unable to marshal json", http.StatusInternalServerError)
+	}
+}
+
+func (h *ProductHandlerMux) GetProduct(w http.ResponseWriter, r *http.Request) {
+	h.l.Println("Handle GET Products")
+	id := GetProductIDFromRequest(r)
+	product, _, err := models.FindProductByID(id)
+	if err != nil {
+		h.l.Println(err.Error())
+		http.Error(w, err.Error(), http.StatusNotFound)
+	}
+	if err = helpers.ToJSON(product, w); err != nil {
+		h.l.Println(err.Error())
 		http.Error(w, "Unable to marshal json", http.StatusInternalServerError)
 	}
 }
@@ -31,6 +46,7 @@ func (h *ProductHandlerMux) AddProduct(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle POST Product")
 	product := r.Context().Value(KeyProduct{}).(*models.Product)
 	if err := models.AddProduct(product); err != nil {
+		h.l.Println(err.Error())
 		http.Error(w, err.Error(), http.StatusConflict)
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -42,6 +58,7 @@ func (h *ProductHandlerMux) UpdateProduct(w http.ResponseWriter, r *http.Request
 	id := GetProductIDFromRequest(r)
 	product := r.Context().Value(KeyProduct{}).(models.Product)
 	if err := models.UpdateProduct(id, &product); err != nil {
+		h.l.Println(err.Error())
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
@@ -51,7 +68,7 @@ func (h *ProductHandlerMux) DeleteProduct(w http.ResponseWriter, r *http.Request
 	h.l.Println("Handle PUT Product")
 	id := GetProductIDFromRequest(r)
 	if err := models.DeleteProductByID(id); err != nil {
-		h.l.Println("[ERROR] Product Not Found.")
+		h.l.Println(err.Error())
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}

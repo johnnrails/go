@@ -24,14 +24,21 @@ func main() {
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
 	getRouter.HandleFunc("/", ph.GetProducts)
+	getRouter.Use(ph.MiddlewareAddHeaders)
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
 	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProduct)
+	putRouter.Use(ph.MiddlewareAddHeaders)
 	putRouter.Use(ph.MiddlewareValidateProduct)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.Use(ph.MiddlewareAddHeaders)
 	postRouter.Use(ph.MiddlewareValidateProduct)
+
+	deleteRouter := sm.Methods(http.MethodPost).Subrouter()
+	deleteRouter.HandleFunc("/{id:[0-9]+}", ph.DeleteProduct)
+	deleteRouter.Use(ph.MiddlewareAddHeaders)
 
 	s := http.Server{
 		Addr:         addr,              // configure the bind address
