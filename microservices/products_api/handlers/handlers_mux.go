@@ -2,13 +2,10 @@ package handlers
 
 import (
 	"context"
-	"log"
-	"net/http"
-	"strconv"
-
-	"github.com/gorilla/mux"
 	"github.com/johnnrails/ddd_go/microservices/products_api/helpers"
 	"github.com/johnnrails/ddd_go/microservices/products_api/models"
+	"log"
+	"net/http"
 )
 
 type ProductHandlerMux struct {
@@ -36,15 +33,9 @@ func (h *ProductHandlerMux) AddProduct(w http.ResponseWriter, r *http.Request) {
 func (h *ProductHandlerMux) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	h.l.Println("Handle PUT Product")
 
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		http.Error(w, "Unable to convert id", http.StatusBadRequest)
-		return
-	}
-
+	id := models.GetProductIDFromRequest(r)
 	product := r.Context().Value(KeyProduct{}).(models.Product)
-	if err = models.UpdateProduct(id, &product); err != nil {
+	if err := models.UpdateProduct(id, &product); err != nil {
 		http.Error(w, "Product Not Found", http.StatusNotFound)
 		return
 	}
