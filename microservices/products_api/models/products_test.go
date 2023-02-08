@@ -35,7 +35,7 @@ func TestProductsFunkContains(t *testing.T) {
 
 func TestProductsFunkFindProductByID(t *testing.T) {
 	p := products[1]
-	pd, _ := FindProductByID(p.ID)
+	pd, _, _ := FindProductByID(p.ID)
 	assert.Equal(t, p, pd)
 }
 
