@@ -36,9 +36,7 @@ var products = []*Product{
 	},
 }
 
-type Products []*Product
-
-func GetProducts() Products {
+func GetProducts() []*Product {
 	return products
 }
 
