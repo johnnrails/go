@@ -41,6 +41,6 @@ func TestProductsFunkFindProductByID(t *testing.T) {
 
 func TestProductsFunkDeleteProduct(t *testing.T) {
 	p := products[1]
-	DeleteProduct(p.ID)
+	DeleteProductByID(p.ID)
 	assert.Equal(t, 1, len(products))
 }

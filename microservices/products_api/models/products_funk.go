@@ -20,7 +20,7 @@ func FindProductByID(id int) (*Product, error) {
 	return r, nil
 }
 
-func DeleteProduct(id int) {
+func DeleteProductByID(id int) {
 	products = funk.Filter(products, func(p *Product) bool {
 		return p.ID != id
 	}).([]*Product)
