@@ -26,3 +26,21 @@ func TestProductMissingPriceReturnError(t *testing.T) {
 	err := v.Validate(p)
 	assert.Len(t, err, 1)
 }
+
+func TestProductsFunkContains(t *testing.T) {
+	p := products[1]
+	contains := Contains(p)
+	assert.Equal(t, true, contains)
+}
+
+func TestProductsFunkFindProductByID(t *testing.T) {
+	p := products[1]
+	pd, _ := FindProductByID(p.ID)
+	assert.Equal(t, p, pd)
+}
+
+func TestProductsFunkDeleteProduct(t *testing.T) {
+	p := products[1]
+	DeleteProduct(p.ID)
+	assert.Equal(t, 1, len(products))
+}

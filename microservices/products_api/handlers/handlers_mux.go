@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"context"
-	"errors"
 	"log"
 	"net/http"
-	"regexp"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -19,30 +17,6 @@ type ProductHandlerMux struct {
 
 func NewProductHandlerMux(l *log.Logger) *ProductHandlerMux {
 	return &ProductHandlerMux{l}
-}
-
-func (h *ProductHandlerMux) GetIDFromPath(path string) (int, error) {
-	reg := regexp.MustCompile("/([0-9]+)")
-	g := reg.FindAllStringSubmatch(path, -1)
-
-	moreThanOneId := len(g) != 1
-	if moreThanOneId {
-		return -1, errors.New("More than one ID Found.")
-	}
-
-	moreThanOneCaptureGroup := len(g[0]) != 2
-	if moreThanOneCaptureGroup {
-		return -1, errors.New("More than one capture group found.")
-	}
-
-	idString := g[0][1]
-	id, err := strconv.Atoi(idString)
-
-	if err != nil {
-		return -1, errors.New("Unable to parse ID to Int.")
-	}
-
-	return id, nil
 }
 
 func (h *ProductHandlerMux) GetProducts(w http.ResponseWriter, r *http.Request) {
@@ -70,8 +44,7 @@ func (h *ProductHandlerMux) UpdateProduct(w http.ResponseWriter, r *http.Request
 	}
 
 	product := r.Context().Value(KeyProduct{}).(models.Product)
-	err = models.UpdateProduct(id, &product)
-	if err != nil {
+	if err = models.UpdateProduct(id, &product); err != nil {
 		http.Error(w, "Product Not Found", http.StatusNotFound)
 		return
 	}
