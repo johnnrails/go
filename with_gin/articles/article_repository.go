@@ -20,7 +20,9 @@ func (ar ArticleRepository) FavoritesCount(articleID uint) uint {
 
 func (ar ArticleRepository) IsArticleFavoriteBy(articleID uint, userID uint) bool {
 	var favorite Favorite
-	ar.DB.Where(Favorite{
+	ar.DB.Model(&Author{
+		UserID: userID,
+	}).Where(Favorite{
 		FavoriteID:   articleID,
 		FavoriteByID: userID,
 	}).First(&favorite)

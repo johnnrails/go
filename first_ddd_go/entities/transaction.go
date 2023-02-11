@@ -1,4 +1,4 @@
-package valueobjects
+package entities
 
 import (
 	"time"

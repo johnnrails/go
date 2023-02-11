@@ -2,12 +2,12 @@ package decorator
 
 import "context"
 
-type CommandHandler[C any] interface {
-	Handle(ctx context.Context, cmd C) error
+type CommandHandler interface {
+	Handle(ctx context.Context, cmd any) error
 }
 
-type QueryHandler[Q any, R any] interface {
-	Handle(ctx context.Context, q Q) (R, error)
+type QueryHandler interface {
+	Handle(ctx context.Context, q any) (any, error)
 }
 
 type MetricsClient interface {

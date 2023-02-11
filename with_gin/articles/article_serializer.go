@@ -29,6 +29,7 @@ type ArticleResponse struct {
 func (s *ArticleSerializer) Response(c *gin.Context) ArticleResponse {
 	userModel := c.MustGet("user_model").(models.UserModel)
 	serializer := AuthorSerializer{s.Author}
+	author := serializer.Response(c)
 
 	repository := ArticleRepository{
 		DB: common.GetDB(),
@@ -42,7 +43,7 @@ func (s *ArticleSerializer) Response(c *gin.Context) ArticleResponse {
 		Body:           s.Body,
 		CreatedAt:      s.CreatedAt.UTC().Format("2006-01-02T15:04:05.999Z"),
 		UpdatedAt:      s.UpdatedAt.UTC().Format("2006-01-02T15:04:05.999Z"),
-		Author:         serializer.Response(c),
+		Author:         author,
 		Favorite:       repository.IsArticleFavoriteBy(s.ID, userModel.ID),
 		FavoritesCount: repository.FavoritesCount(s.ID),
 	}

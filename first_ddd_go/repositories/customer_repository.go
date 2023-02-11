@@ -1,10 +1,10 @@
-package customer_repository
+package repositories
 
 import (
 	"errors"
 
 	"github.com/google/uuid"
-	"github.com/johnnrails/ddd_go/first_ddd_go/aggregates"
+	"github.com/johnnrails/ddd_go/first_ddd_go/entities"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 )
 
 type CustomerRepository interface {
-	Get(uuid.UUID) (aggregates.Customer, error)
-	Add(aggregates.Customer) error
-	Update(aggregates.Customer) error
+	Get(uuid.UUID) (entities.Customer, error)
+	Add(entities.Customer) error
+	Update(entities.Customer) error
 }

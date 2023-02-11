@@ -33,10 +33,6 @@ func main_user() {
 	fmt.Printf("%+v\n", res)
 }
 
-func main_client_streaming() {
-
-}
-
 func main() {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -48,8 +44,16 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := wearablepb.NewWearableServiceClient(conn)
-	stream, err := client.ConsumeBeatsPerMinute(context.Background())
+	userClient := userpb.NewUserServiceClient(conn)
+	res, err := userClient.GetUser(context.Background(), &userpb.GetUserRequest{
+		Uuid: "hello",
+	})
+	if err != nil {
+		log.Fatalf("fail to GetUser: %v", err)
+	}
+	fmt.Printf("%+v\n", res)
+	wearableClient := wearablepb.NewWearableServiceClient(conn)
+	stream, err := wearableClient.ConsumeBeatsPerMinute(context.Background())
 
 	for i := 0; i < 10; i++ {
 		fmt.Println("SENDING... ", i)
@@ -58,6 +62,7 @@ func main() {
 			Value:  uint32(i),
 			Minute: uint32(i * 2),
 		})
+
 		if err != nil {
 			log.Fatalln("Send", err)
 		}
@@ -67,6 +72,6 @@ func main() {
 	if err != nil {
 		log.Fatalln("Close", err)
 	}
-	main_client_streaming()
+
 	fmt.Println(resp.GetTotal())
 }

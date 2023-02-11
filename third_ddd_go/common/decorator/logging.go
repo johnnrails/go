@@ -8,27 +8,25 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type logging[C any, R any] struct {
+type logging struct {
 	logger *logrus.Entry
 }
 
-func CreateLogging[C any, R any](logger *logrus.Entry) logging[C, R] {
-	return logging[C, R]{
-		logger: logger,
-	}
+func CreateLogging(logger *logrus.Entry) logging {
+	return logging{logger}
 }
 
-func (d logging[C, R]) Handle(ctx context.Context, typeField string, command C, handler CommandHandler[C]) (err error) {
+func (d logging) Handle(ctx context.Context, cmd interface{}, handler CommandHandler) (err error) {
 	logger := d.logger.WithFields(logrus.Fields{
-		typeField:           generateActionName(command),
-		typeField + "_body": fmt.Sprintf("%#v", command),
+		"command":      generateActionName(cmd),
+		"command_body": fmt.Sprintf("%#v", cmd),
 	})
-	logger.Debug("Executing " + typeField)
-	err = handler.Handle(ctx, command)
+	logger.Debug("Executing command")
+	err = handler.Handle(ctx, cmd)
 	if err == nil {
-		logger.Info(typeField + " executed successfully")
+		logger.Info("command executed successfully")
 	} else {
-		logger.WithError(err).Error("Failed to execute " + typeField)
+		logger.WithError(err).Error("Failed to execute command")
 	}
 	return err
 }
@@ -37,14 +35,14 @@ func generateActionName(handler any) string {
 	return strings.Split(fmt.Sprintf("%T", handler), ".")[1]
 }
 
-func (d logging[C, R]) HandleQuery(ctx context.Context, command C, handler QueryHandler[C, R]) (result R, err error) {
+func (d logging) HandleQuery(ctx context.Context, cmd interface{}, handler QueryHandler) (result interface{}, err error) {
 	logger := d.logger.WithFields(logrus.Fields{
-		"query":      generateActionName(command),
-		"query_body": fmt.Sprintf("%#v", command),
+		"query":      generateActionName(cmd),
+		"query_body": fmt.Sprintf("%#v", cmd),
 	})
 
 	logger.Debug("Executing query")
-	r, err := handler.Handle(ctx, command)
+	r, err := handler.Handle(ctx, cmd)
 
 	if err == nil {
 		logger.Info("Query executed successfully")

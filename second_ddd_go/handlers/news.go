@@ -8,7 +8,7 @@ import (
 
 	"github.com/johnnrails/ddd_go/second_ddd_go/application"
 	"github.com/johnnrails/ddd_go/second_ddd_go/domain"
-	"github.com/johnnrails/ddd_go/second_ddd_go/infra/persistence"
+	"github.com/johnnrails/ddd_go/second_ddd_go/domain/repositories"
 	"github.com/johnnrails/ddd_go/second_ddd_go/response"
 	"github.com/julienschmidt/httprouter"
 )
@@ -17,9 +17,8 @@ type NewsRoutesHandler struct {
 	application *application.NewsApplication
 }
 
-func CreateNewsRoutesHandler() *NewsRoutesHandler {
-	nr, _ := persistence.CreateNewsRepository()
-	na := application.CreateNewsApplication(nr)
+func CreateNewsRoutesHandler(repo repositories.NewsRepository) *NewsRoutesHandler {
+	na := application.CreateNewsApplication(repo)
 	return &NewsRoutesHandler{
 		application: na,
 	}

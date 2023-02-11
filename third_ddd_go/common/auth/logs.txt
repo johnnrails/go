@@ -1,0 +1,51 @@
+2023/02/11 10:10:44 http_test.go:22: This is my log message.
+2023/02/11 10:10:44 http_test.go:43: <nil>
+2023/02/11 10:10:44 http_test.go:44: map[]
+2023/02/11 10:13:20 http_test.go:24: This is my log message.
+2023/02/11 10:13:20 http_test.go:45: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc000012138 map[alg:HS256] 0xc000014068 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:13:20 http_test.go:46: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:14:13 http_test.go:24: This is my log message.
+2023/02/11 10:14:13 http_test.go:45: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc000012138 map[alg:HS256] 0xc000014068 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:14:13 http_test.go:46: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:14:46 http_test.go:24: This is my log message.
+2023/02/11 10:14:46 http_test.go:40: <nil>
+2023/02/11 10:14:46 http_test.go:46: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc000012138 map[alg:HS256] 0xc000014068 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:14:46 http_test.go:47: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:16:21 http_test.go:24: This is my log message.
+2023/02/11 10:16:21 http_test.go:40: <nil>
+2023/02/11 10:16:21 http_test.go:41: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc000012138 map[alg:HS256] 0xc000014068  false}
+2023/02/11 10:16:21 http_test.go:47: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc000012138 map[alg:HS256] 0xc000014068 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:16:21 http_test.go:48: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:17:00 http_test.go:24: This is my log message.
+2023/02/11 10:17:00 http_test.go:40: <nil>
+2023/02/11 10:17:00 http_test.go:41: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0058  false}
+2023/02/11 10:17:00 http_test.go:47: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0058 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:17:00 http_test.go:48: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:17:40 http_test.go:39: <nil>
+2023/02/11 10:17:40 http_test.go:40: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0050  false}
+2023/02/11 10:17:40 http_test.go:46: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0050 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:17:40 http_test.go:47: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:23:45 http_test.go:39: <nil>
+2023/02/11 10:23:45 http_test.go:40: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0050  false}
+2023/02/11 10:23:45 http_test.go:46: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0050 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:23:45 http_test.go:47: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:31:15 http_test.go:39: <nil>
+2023/02/11 10:31:15 http_test.go:40: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0050  false}
+2023/02/11 10:31:15 http_test.go:46: &{eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX3V1aWQiOiJpZDEyMyIsInJvbGUiOiJBZG1pbiIsIm5hbWUiOiJyYWlscyIsImVtYWlsIjoiam9hb2NhcmZlOUBnbWFpbC5jb20ifQ.H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 0xc0000aa120 map[alg:HS256] 0xc0000a0050 H3rYT8GnGDmZhKS8H-DCi3JLJWsiqE4khvQXIEXqtK0 false}
+2023/02/11 10:31:15 http_test.go:47: map[email:joaocarfe9@gmail.com name:rails role:Admin user_uuid:id123]
+2023/02/11 10:34:06 http_test.go:37: <nil>
+2023/02/11 10:34:06 http_test.go:38: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc0000aa120 map[alg:HS256 typ:JWT] 0xc0000a0050  false}
+2023/02/11 10:34:06 http_test.go:44: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc0000aa120 map[alg:HS256 typ:JWT] 0xc0000a0050 03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI true}
+2023/02/11 10:34:06 http_test.go:45: map[aud:www.example.com exp:1.707658389e+09 iat:1.676122389e+09 iss:Online JWT Builder name:Johnny sub:jrocket@example.com]
+2023/02/11 10:34:17 http_test.go:37: <nil>
+2023/02/11 10:34:17 http_test.go:38: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc000012138 map[alg:HS256 typ:JWT] 0xc000014060  false}
+2023/02/11 10:34:17 http_test.go:44: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc000012138 map[alg:HS256 typ:JWT] 0xc000014060 03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI true}
+2023/02/11 10:34:17 http_test.go:45: map[aud:www.example.com exp:1.707658389e+09 iat:1.676122389e+09 iss:Online JWT Builder name:Johnny sub:jrocket@example.com]
+2023/02/11 10:34:26 http_test.go:37: <nil>
+2023/02/11 10:34:26 http_test.go:38: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc000012138 map[alg:HS256 typ:JWT] 0xc000014060  false}
+2023/02/11 10:34:26 http_test.go:44: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc000012138 map[alg:HS256 typ:JWT] 0xc000014060 03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI false}
+2023/02/11 10:34:26 http_test.go:45: map[aud:www.example.com exp:1.707658389e+09 iat:1.676122389e+09 iss:Online JWT Builder name:Johnny sub:jrocket@example.com]
+2023/02/11 10:34:32 http_test.go:37: <nil>
+2023/02/11 10:34:32 http_test.go:38: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc000012138 map[alg:HS256 typ:JWT] 0xc000014060  false}
+2023/02/11 10:34:32 http_test.go:44: &{eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NzYxMjIzODksImV4cCI6MTcwNzY1ODM4OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIm5hbWUiOiJKb2hubnkifQ.03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI 0xc000012138 map[alg:HS256 typ:JWT] 0xc000014060 03bjc7COQLjNguIdG3jl2SkhNljEjUeYem9uoPLa1QI true}
+2023/02/11 10:34:32 http_test.go:45: map[aud:www.example.com exp:1.707658389e+09 iat:1.676122389e+09 iss:Online JWT Builder name:Johnny sub:jrocket@example.com]

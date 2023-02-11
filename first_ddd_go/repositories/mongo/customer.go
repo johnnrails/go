@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/johnnrails/ddd_go/first_ddd_go/aggregates"
+	"github.com/johnnrails/ddd_go/first_ddd_go/entities"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -29,7 +29,7 @@ func New(ctx context.Context, connection string) (*MongoRepository, error) {
 	}, nil
 }
 
-func (mr *MongoRepository) Get(id uuid.UUID) (aggregates.Customer, error) {
+func (mr *MongoRepository) Get(id uuid.UUID) (entities.Customer, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -41,7 +41,7 @@ func (mr *MongoRepository) Get(id uuid.UUID) (aggregates.Customer, error) {
 	return c.ToAggregate(), nil
 }
 
-func (mr *MongoRepository) Add(c aggregates.Customer) error {
+func (mr *MongoRepository) Add(c entities.Customer) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := mr.customers.InsertOne(ctx, NewFromCustomer(c))
@@ -50,7 +50,7 @@ func (mr *MongoRepository) Add(c aggregates.Customer) error {
 	}
 	return nil
 }
-func (mr *MongoRepository) Update(c aggregates.Customer) error {
+func (mr *MongoRepository) Update(c entities.Customer) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := mr.customers.UpdateOne(ctx, c.GetID(), NewFromCustomer(c))
@@ -60,7 +60,7 @@ func (mr *MongoRepository) Update(c aggregates.Customer) error {
 	return nil
 }
 
-func NewFromCustomer(c aggregates.Customer) mongoCustomer {
+func NewFromCustomer(c entities.Customer) mongoCustomer {
 	return mongoCustomer{
 		ID:   c.GetID(),
 		Name: c.GetName(),
@@ -72,8 +72,8 @@ type mongoCustomer struct {
 	Name string    `bson:"name"`
 }
 
-func (m mongoCustomer) ToAggregate() aggregates.Customer {
-	c := aggregates.Customer{}
+func (m mongoCustomer) ToAggregate() entities.Customer {
+	c := entities.Customer{}
 	c.SetID(m.ID)
 	c.SetName(m.Name)
 	return c

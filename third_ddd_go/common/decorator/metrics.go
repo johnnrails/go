@@ -7,11 +7,11 @@ import (
 	"time"
 )
 
-type commandMetrics[C any] struct {
+type commandMetrics struct {
 	client MetricsClient
 }
 
-func (d commandMetrics[C]) Handle(ctx context.Context, cmd C, handler CommandHandler[C]) (err error) {
+func (d commandMetrics) Handle(ctx context.Context, cmd interface{}, handler CommandHandler) (err error) {
 	start := time.Now()
 	actionName := strings.ToLower(generateActionName(cmd))
 
@@ -28,11 +28,11 @@ func (d commandMetrics[C]) Handle(ctx context.Context, cmd C, handler CommandHan
 	return handler.Handle(ctx, cmd)
 }
 
-type queryMetrics[C any, R any] struct {
+type queryMetrics struct {
 	client MetricsClient
 }
 
-func (d queryMetrics[C, R]) Handle(ctx context.Context, query C, handler QueryHandler[C, R]) (result R, err error) {
+func (d queryMetrics) Handle(ctx context.Context, query interface{}, handler QueryHandler) (result interface{}, err error) {
 	start := time.Now()
 	actionName := strings.ToLower(generateActionName(query))
 

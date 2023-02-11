@@ -38,7 +38,7 @@ func Respond(w http.ResponseWriter, code int, src interface{}) {
 		body = []byte(s)
 	case *ErrorResponse, ErrorResponse:
 		if body, err = json.Marshal(src); err != nil {
-			w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("{\"reason\":\"failed to parse json\"}"))
 			return

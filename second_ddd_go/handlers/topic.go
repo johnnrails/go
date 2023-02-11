@@ -7,7 +7,7 @@ import (
 
 	"github.com/johnnrails/ddd_go/second_ddd_go/application"
 	"github.com/johnnrails/ddd_go/second_ddd_go/domain"
-	"github.com/johnnrails/ddd_go/second_ddd_go/infra/persistence"
+	"github.com/johnnrails/ddd_go/second_ddd_go/domain/repositories"
 	"github.com/johnnrails/ddd_go/second_ddd_go/response"
 	"github.com/julienschmidt/httprouter"
 )
@@ -16,17 +16,22 @@ type TopicRoutesHandler struct {
 	application *application.TopicApplication
 }
 
-func CreateTopicRoutesHandler() *TopicRoutesHandler {
-	r, _ := persistence.CreateTopicRepository()
-	a := application.CreateTopicApplication(r)
+func CreateTopicRoutesHandler(repo repositories.TopicRepository) *TopicRoutesHandler {
+	a := application.CreateTopicApplication(repo)
 	return &TopicRoutesHandler{
 		application: a,
 	}
 }
 
 func (handler *TopicRoutesHandler) GetAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-
+	topics, err := handler.application.GetAll()
+	if err != nil {
+		response.Error(w, http.StatusInternalServerError, err, err.Error())
+		return
+	}
+	response.JSON(w, http.StatusOK, topics)
 }
+
 func (handler *TopicRoutesHandler) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	topicID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {

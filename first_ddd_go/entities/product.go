@@ -1,14 +1,13 @@
-package aggregates
+package entities
 
 import (
 	"errors"
 
 	"github.com/google/uuid"
-	"github.com/johnnrails/ddd_go/first_ddd_go/entities"
 )
 
 type Product struct {
-	item     *entities.Item
+	item     *Item
 	price    float64
 	quantity int
 }
@@ -19,7 +18,7 @@ func NewProduct(name string, description string, price float64) (Product, error)
 	}
 
 	return Product{
-		item: &entities.Item{
+		item: &Item{
 			ID:          uuid.New(),
 			Name:        name,
 			Description: description,
@@ -41,7 +40,7 @@ func (p Product) GetDescription() string {
 	return p.item.GetDescription()
 }
 
-func (p Product) GetItem() *entities.Item {
+func (p Product) GetItem() *Item {
 	return p.item
 }
 
