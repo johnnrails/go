@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/johnnrails/ddd_go/second_ddd_go/domain"
-	"github.com/johnnrails/ddd_go/second_ddd_go/domain/repositories"
 	"github.com/johnnrails/ddd_go/second_ddd_go/helpers"
+	"github.com/johnnrails/ddd_go/second_ddd_go/infra/repositories"
 	"github.com/johnnrails/ddd_go/second_ddd_go/response"
 	"github.com/julienschmidt/httprouter"
 )

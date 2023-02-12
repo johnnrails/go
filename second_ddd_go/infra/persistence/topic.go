@@ -3,7 +3,7 @@ package persistence
 import (
 	"github.com/johnnrails/ddd_go/second_ddd_go/config"
 	"github.com/johnnrails/ddd_go/second_ddd_go/domain"
-	"github.com/johnnrails/ddd_go/second_ddd_go/domain/repositories"
+	"github.com/johnnrails/ddd_go/second_ddd_go/infra/repositories"
 	"gorm.io/gorm"
 )
 

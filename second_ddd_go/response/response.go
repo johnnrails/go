@@ -28,6 +28,7 @@ func Respond(w http.ResponseWriter, code int, src interface{}) {
 	var err error
 
 	switch s := src.(type) {
+	// the type is []byte when the src comes as json
 	case []byte:
 		if !json.Valid(s) {
 			Error(w, http.StatusInternalServerError, err, "invalid json")
