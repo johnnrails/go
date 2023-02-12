@@ -20,8 +20,8 @@ func UsersRouter(router *gin.RouterGroup) {
 }
 
 func UsersRegistration(c *gin.Context) {
-	userModelValidator := validators.UserModelValidator{}
-	if err := userModelValidator.Bind(c); err != nil {
+	validator := validators.UserValidator{}
+	if err := validator.BindFromContext(c); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 		return
 	}
@@ -30,13 +30,13 @@ func UsersRegistration(c *gin.Context) {
 		DB: common.GetDB(),
 	}
 
-	if err := repository.SaveOne(userModelValidator.UserModel); err != nil {
+	if err := repository.SaveOne(validator.UserModel); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, common.NewError("database", err))
 		return
 	}
 
 	serializer := serializers.UserSerializer{}
-	ctx := context.WithValue(c, "user_model", userModelValidator.UserModel)
+	ctx := context.WithValue(c, "user_model", validator.UserModel)
 	c.JSON(http.StatusCreated, gin.H{"user": serializer.Response(ctx)})
 }
 

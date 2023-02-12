@@ -24,9 +24,10 @@ func UserRetrieve(c *gin.Context) {
 
 func UserUpdate(c *gin.Context) {
 	model := c.MustGet("user_model").(models.UserModel)
-	validator := validators.NewUserModelValidatorFillWith(model)
+	validator := validators.UserValidator{}
+	validator.BindFromModel(model)
 
-	if err := validator.Bind(c); err != nil {
+	if err := validator.BindFromContext(c); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 		return
 	}

@@ -18,10 +18,10 @@ func init() {
 	grpc_logrus.ReplaceGrpcLogger(logrus.NewEntry(logger))
 }
 
-func RunGRPCServer(registerServer func(server *grpc.Server)) {
+func newGrpcServer() *grpc.Server {
 	logrusEntry := logrus.NewEntry(logrus.StandardLogger())
 
-	grpcServer := grpc.NewServer(
+	return grpc.NewServer(
 		grpc_middleware.WithUnaryServerChain(
 			grpc_ctxtags.UnaryServerInterceptor(
 				grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor),
@@ -33,13 +33,17 @@ func RunGRPCServer(registerServer func(server *grpc.Server)) {
 			grpc_logrus.StreamServerInterceptor(logrusEntry),
 		),
 	)
+}
 
+func RunGRPCServer(registerServer func(server *grpc.Server)) {
+	grpcServer := newGrpcServer()
 	registerServer(grpcServer)
 
 	listen, err := net.Listen("tpc", ":8080")
 	if err != nil {
 		logrus.Fatal(err)
 	}
+
 	logrus.WithField("grpcEndpoint", ":8080").Info("Starting: gRPC Listener")
 	logrus.Fatal(grpcServer.Serve(listen))
 }

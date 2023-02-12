@@ -6,37 +6,39 @@ import (
 	"github.com/johnnrails/ddd_go/with_gin/users/models"
 )
 
-type UserModelValidator struct {
-	User struct {
-		Username string `form:"username" json:"username" binding:"exists,alphanum,min=8,max=32"`
-		Email    string `form:"email" json:"email" binding:"exists,email"`
-		Password string `form:"password" json:"password" binding:"exists,min=12,max=64"`
-		Bio      string `form:"bio" json:"bio" binding:"max=1024"`
-	} `json:"user"`
-	UserModel models.UserModel `json:"-"`
+type UserFromUserValidator struct {
+	Username string `form:"username" json:"username" binding:"exists,alphanum,min=8,max=32"`
+	Email    string `form:"email" json:"email" binding:"exists,email"`
+	Password string `form:"password" json:"password" binding:"exists,min=12,max=64"`
+	Bio      string `form:"bio" json:"bio" binding:"max=1024"`
 }
 
-func (self *UserModelValidator) Bind(c *gin.Context) error {
+type UserValidator struct {
+	UserFromUserValidator `json:"user"`
+	UserModel             models.UserModel `json:"-"`
+}
+
+func (self *UserValidator) BindFromContext(c *gin.Context) error {
 	err := common.Bind(c, self)
 	if err != nil {
 		return err
 	}
-	self.UserModel.Username = self.User.Username
-	self.UserModel.Email = self.User.Email
-	self.UserModel.Bio = self.User.Bio
-	if self.User.Password != common.NBRandomPassword {
-		self.UserModel.SetPassword(self.User.Password)
+	self.UserModel.Username = self.UserFromUserValidator.Username
+	self.UserModel.Email = self.UserFromUserValidator.Email
+	self.UserModel.Bio = self.UserFromUserValidator.Bio
+	if self.UserFromUserValidator.Password != common.NBRandomPassword {
+		self.UserModel.SetPassword(self.UserFromUserValidator.Password)
 	}
 	return nil
 }
 
-func NewUserModelValidatorFillWith(userModel models.UserModel) UserModelValidator {
-	userModelValidator := UserModelValidator{}
-	userModelValidator.User.Username = userModel.Username
-	userModelValidator.User.Email = userModel.Email
-	userModelValidator.User.Bio = userModel.Bio
-	userModelValidator.User.Password = common.NBRandomPassword
-	return userModelValidator
+func (self *UserValidator) BindFromModel(userModel models.UserModel) {
+	self.UserFromUserValidator = UserFromUserValidator{
+		Username: userModel.Username,
+		Email:    userModel.Email,
+		Password: userModel.Password,
+		Bio:      userModel.Bio,
+	}
 }
 
 type LoginValidator struct {

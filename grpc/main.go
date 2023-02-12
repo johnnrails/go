@@ -31,14 +31,9 @@ func init() {
 	grpc_logrus.ReplaceGrpcLogger(logrus.NewEntry(logger))
 }
 
-func main() {
-	lis, err := net.Listen("tcp", "localhost:9879")
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-
+func newGrpcServer() *grpc.Server {
 	logrusEntry := logrus.NewEntry(logrus.StandardLogger())
-	grpcServer := grpc.NewServer(
+	return grpc.NewServer(
 		grpc_middleware.WithUnaryServerChain(
 			grpc_ctxtags.UnaryServerInterceptor(
 				grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor),
@@ -50,6 +45,15 @@ func main() {
 			grpc_logrus.StreamServerInterceptor(logrusEntry),
 		),
 	)
+}
+
+func main() {
+	lis, err := net.Listen("tcp", "localhost:9879")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	grpcServer := newGrpcServer()
 
 	userServer := &server.UserService{}
 	wearableServer := &server.WearableServer{}
