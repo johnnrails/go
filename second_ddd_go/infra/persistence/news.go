@@ -19,7 +19,7 @@ func CreateNewsRepository() (repositories.NewsRepository, error) {
 	return &NewsRepositoryImpl{DB: db}, nil
 }
 
-func (r *NewsRepositoryImpl) Get(id int) (*domain.News, error) {
+func (r *NewsRepositoryImpl) GetByID(id int) (*domain.News, error) {
 	news := &domain.News{}
 	if err := r.DB.Preload("Topic").First(&news, id).Error; err != nil {
 		return nil, err

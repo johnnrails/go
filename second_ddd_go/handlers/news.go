@@ -1,12 +1,10 @@
 package handlers
 
 import (
-	"encoding/json"
-	"errors"
 	"net/http"
 	"strconv"
 
-	"github.com/johnnrails/ddd_go/second_ddd_go/application"
+	"github.com/johnnrails/ddd_go/microservices/products_api/helpers"
 	"github.com/johnnrails/ddd_go/second_ddd_go/domain"
 	"github.com/johnnrails/ddd_go/second_ddd_go/domain/repositories"
 	"github.com/johnnrails/ddd_go/second_ddd_go/response"
@@ -14,14 +12,11 @@ import (
 )
 
 type NewsRoutesHandler struct {
-	application *application.NewsApplication
+	repository repositories.NewsRepository
 }
 
 func CreateNewsRoutesHandler(repo repositories.NewsRepository) *NewsRoutesHandler {
-	na := application.CreateNewsApplication(repo)
-	return &NewsRoutesHandler{
-		application: na,
-	}
+	return &NewsRoutesHandler{repo}
 }
 
 func (handler *NewsRoutesHandler) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -30,7 +25,7 @@ func (handler *NewsRoutesHandler) Get(w http.ResponseWriter, r *http.Request, ps
 	newsID, err := strconv.Atoi(slugOrID)
 	// if error it means that param is a slug
 	if err != nil {
-		news, err2 := handler.application.GetBySlug(slugOrID)
+		news, err2 := handler.repository.GetBySlug(slugOrID)
 		if err2 != nil {
 			response.Error(w, http.StatusNotFound, err2, err2.Error())
 			return
@@ -39,7 +34,7 @@ func (handler *NewsRoutesHandler) Get(w http.ResponseWriter, r *http.Request, ps
 		return
 	}
 
-	news, err := handler.application.GetByID(newsID)
+	news, err := handler.repository.GetByID(newsID)
 	if err != nil {
 		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
@@ -52,7 +47,7 @@ func (handler *NewsRoutesHandler) GetAll(w http.ResponseWriter, r *http.Request,
 	status := queryValues.Get("status")
 
 	if status == "draf" || status == "publish" {
-		news, err := handler.application.GetByStatus(status)
+		news, err := handler.repository.GetByStatus(status)
 		if err != nil {
 			response.Error(w, http.StatusNotFound, err, err.Error())
 			return
@@ -61,32 +56,22 @@ func (handler *NewsRoutesHandler) GetAll(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	limit, err1 := strconv.Atoi(queryValues.Get("limit"))
-	page, err2 := strconv.Atoi(queryValues.Get("page"))
-
-	if err1 != nil || err2 != nil {
-		response.Error(w, http.StatusBadRequest, errors.New("could not parse limit or page query values"), "could not parse limit or page query values")
-	}
-
-	if limit != 0 && page != 0 {
-		news, err := handler.application.GetAll(limit, page)
-		if err != nil {
-			response.Error(w, http.StatusNotFound, err, err.Error())
-			return
-		}
-		response.JSON(w, http.StatusOK, news)
+	news, err := handler.repository.GetAll()
+	if err != nil {
+		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
 	}
+	response.JSON(w, http.StatusOK, news)
+	return
 }
 
 func (handler *NewsRoutesHandler) Create(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	decoder := json.NewDecoder(r.Body)
 	var n domain.News
-	if err := decoder.Decode(&n); err != nil {
+	if err := helpers.FromJSON(&n, r.Body); err != nil {
 		response.Error(w, http.StatusNotFound, err, err.Error())
 	}
-	err := handler.application.Add(n)
-	if err != nil {
+
+	if err := handler.repository.Save(&n); err != nil {
 		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
 	}
@@ -94,20 +79,19 @@ func (handler *NewsRoutesHandler) Create(w http.ResponseWriter, r *http.Request,
 }
 
 func (handler *NewsRoutesHandler) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	decoder := json.NewDecoder(r.Body)
 	var n domain.News
-	err := decoder.Decode(&n)
-	if err != nil {
+	if err := helpers.FromJSON(&n, r.Body); err != nil {
 		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
 	}
+
 	newsID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
 		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
 	}
-	err = handler.application.Update(newsID, n)
-	if err != nil {
+
+	if err = handler.repository.Update(newsID, n); err != nil {
 		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
 	}
@@ -120,8 +104,8 @@ func (handler *NewsRoutesHandler) Remove(w http.ResponseWriter, r *http.Request,
 		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
 	}
-	err = handler.application.Remove(newsID)
-	if err != nil {
+
+	if err = handler.repository.Remove(newsID); err != nil {
 		response.Error(w, http.StatusNotFound, err, err.Error())
 		return
 	}
