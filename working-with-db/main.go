@@ -1,81 +1,73 @@
 package main
 
 import (
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	"context"
+	"database/sql"
+	"log"
+	"strconv"
+
+	_ "embed"
+
+	"github.com/google/uuid"
+	"github.com/johnnrails/ddd_go/working-with-db/sqlc"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
-type Product struct {
-	gorm.Model
-	Code       string
-	Price      uint
-	Categories []*Category `gorm:"many2many:product_categories;"`
-}
-
-type Category struct {
-	gorm.Model
-	Name string
-}
-
-type User struct {
-	gorm.Model
-	Username string `gorm:"column:username"`
-	Email    string `gorm:"column:email;unique_index"`
-	Bio      string `gorm:"column:bio;size:1024"`
-	Password string `gorm:"column:password;not null"`
-}
-
-type Follow struct {
-	gorm.Model
-	FollowedID  uint
-	Followed    User
-	FollowingID uint
-	Following   User
-}
-
-type Favorite struct {
-	gorm.Model
-	ArticleID uint
-	Article   Article
-	UserID    uint
-}
-
-type Article struct {
-	gorm.Model
-	AuthorID    uint
-	Author      User
-	Slug        string `gorm:"unique_index"`
-	Title       string
-	Description string `gorm:"size:2048"`
-	Body        string `gorm:"size:2048"`
-}
-
-type Tag struct {
-	gorm.Model
-	Tag      string    `gorm:"unique_index"`
-	Articles []Article `gorm:"many2many:article_tags;"`
-}
-
-type Comment struct {
-	gorm.Model
-	Article   Article
-	ArticleID uint
-	Author    User
-	AuthorID  uint
-	Body      string `gorm:"size:2048"`
-}
+//go:embed schema.sql
+var ddl string
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	ctx := context.Background()
+	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatalln(err)
 	}
-	db.AutoMigrate(&Product{})
-	db.AutoMigrate(&Category{})
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&Comment{})
-	db.AutoMigrate(&Favorite{})
-	db.AutoMigrate(&Follow{})
-	db.AutoMigrate(&Tag{})
-	db.AutoMigrate(&Article{})
+
+	if _, err := db.ExecContext(ctx, ddl); err != nil {
+		log.Fatalln(err)
+	}
+
+	queries := sqlc.New(db)
+
+	for i := 0; i < 10; i++ {
+		idx := strconv.FormatInt(int64(i), 10)
+		userID := uuid.New().String()
+		err = queries.CreateUser(ctx, sqlc.CreateUserParams{
+			ID:    userID,
+			Name:  "john" + idx,
+			Email: "joaocarfe9@gmail.com" + idx,
+			Bio: sql.NullString{
+				String: "Bio",
+				Valid:  true,
+			},
+			Password: "jhsfsdlfhsdlf" + idx,
+		})
+		if err != nil {
+			log.Println("CREATE USER ERROR::::::", err)
+		}
+		price, err := strconv.Atoi(idx)
+		if err != nil {
+			log.Println("STRCONV ERROR::::::", err)
+		}
+		productID := uuid.New().String()
+		err = queries.CreateProduct(ctx, sqlc.CreateProductParams{
+			ID:     productID,
+			Name:   "name" + idx,
+			Code:   "code" + idx,
+			Price:  int64(price),
+			UserID: userID,
+		})
+		if err != nil {
+			log.Println("CREATE PRODUCT ERROR::::::", err)
+		}
+	}
+
+	users, err := queries.ListUsers(ctx)
+	products, err := queries.ListProducts(ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(users)
+	log.Println(products)
 }
