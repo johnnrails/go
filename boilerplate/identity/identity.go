@@ -1,10 +1,11 @@
 package identity
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 )
 
-// Identity data to be encode in auth token
 type Identity struct {
 	Token        string     `json:"token"`
 	Permission   Permission `json:"permission"`
@@ -13,19 +14,12 @@ type Identity struct {
 	ClientDomain string     `json:"client_domain,omitempty"`
 }
 
-// Flag type
 type Permission uint8
 
-// Add permission
-func (p Permission) Add(flag Permission) Permission { return p | flag }
-
-// Remove permission
+func (p Permission) Add(flag Permission) Permission    { return p | flag }
 func (p Permission) Remove(flag Permission) Permission { return p &^ flag }
+func (p Permission) Has(flag Permission) bool          { return p&flag != 0 }
 
-// Has permission
-func (p Permission) Has(flag Permission) bool { return p&flag != 0 }
-
-// Execution context flags
 const (
 	PermissionUserRead Permission = 1 << iota
 	PermissionUserWrite
@@ -33,3 +27,23 @@ const (
 	PermissionClientRead
 	PermissionTokenRead
 )
+
+type key struct{}
+
+func ContextWithIdentity(ctx context.Context, i *Identity) context.Context {
+	if ctx == nil {
+		return nil
+	}
+	if i == nil {
+		return ctx
+	}
+	return context.WithValue(ctx, key{}, i)
+}
+
+func FromContext(ctx context.Context) (*Identity, bool) {
+	if ctx == nil {
+		return nil, false
+	}
+	i, ok := ctx.Value(key{}).(*Identity)
+	return i, ok
+}

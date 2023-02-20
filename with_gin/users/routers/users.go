@@ -1,16 +1,14 @@
 package routers
 
 import (
-	"context"
 	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/johnnrails/ddd_go/with_gin/common"
-	"github.com/johnnrails/ddd_go/with_gin/users"
 	"github.com/johnnrails/ddd_go/with_gin/users/models"
 	"github.com/johnnrails/ddd_go/with_gin/users/repository"
-	"github.com/johnnrails/ddd_go/with_gin/users/serializers"
+	response "github.com/johnnrails/ddd_go/with_gin/users/response"
 	"github.com/johnnrails/ddd_go/with_gin/users/validators"
 )
 
@@ -26,18 +24,13 @@ func UsersRegistration(c *gin.Context) {
 		return
 	}
 
-	repository := repository.UserRepository{
-		DB: common.GetDB(),
-	}
-
-	if err := repository.SaveOne(validator.UserModel); err != nil {
+	repo := repository.UserRepository{DB: common.GetDB()}
+	if err := repo.SaveOne(validator.UserModel); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, common.NewError("database", err))
 		return
 	}
 
-	serializer := serializers.UserSerializer{}
-	ctx := context.WithValue(c, "user_model", validator.UserModel)
-	c.JSON(http.StatusCreated, gin.H{"user": serializer.Response(ctx)})
+	c.JSON(http.StatusCreated, gin.H{"user": response.ToUserResponse(validator.UserModel)})
 }
 
 func UsersLogin(c *gin.Context) {
@@ -48,11 +41,8 @@ func UsersLogin(c *gin.Context) {
 		return
 	}
 
-	repository := repository.UserRepository{
-		DB: common.GetDB(),
-	}
-
-	userModel, err := repository.FindOneUser(&models.UserModel{
+	repo := repository.UserRepository{DB: common.GetDB()}
+	userModel, err := repo.FindOneUser(&models.UserModel{
 		Email: loginValidator.UserModel.Email,
 	})
 
@@ -61,7 +51,5 @@ func UsersLogin(c *gin.Context) {
 		return
 	}
 
-	ctx := users.UpdateContextUserModel(c, userModel.ID)
-	serializer := serializers.UserSerializer{}
-	c.JSON(http.StatusOK, gin.H{"user": serializer.Response(ctx)})
+	c.JSON(http.StatusOK, gin.H{"user": response.ToUserResponse(userModel)})
 }

@@ -62,23 +62,21 @@ func JSONError(ctx context.Context, w http.ResponseWriter, code int, err error) 
 }
 
 func NotFound() http.Handler {
-	fn := func(w http.ResponseWriter, r *http.Request) error {
+	return HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		httpError := &httperrors.HttpError{
 			Code:    http.StatusNotFound,
 			Message: fmt.Sprintf("Route %s %s", r.URL.Path, http.StatusText(http.StatusNotFound)),
 		}
 		return JSON(r.Context(), w, httpError.Code, httpError)
-	}
-	return HandlerFunc(fn)
+	})
 }
 
 func NowAllowed() http.Handler {
-	fn := func(w http.ResponseWriter, r *http.Request) error {
+	return HandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		httpError := &httperrors.HttpError{
 			Code:    http.StatusMethodNotAllowed,
 			Message: fmt.Sprintf("Route %s %s", r.URL.Path, http.StatusText(http.StatusNotFound)),
 		}
 		return JSON(r.Context(), w, httpError.Code, httpError)
-	}
-	return HandlerFunc(fn)
+	})
 }

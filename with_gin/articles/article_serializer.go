@@ -5,7 +5,7 @@ import (
 	"github.com/gosimple/slug"
 	"github.com/johnnrails/ddd_go/with_gin/common"
 	"github.com/johnnrails/ddd_go/with_gin/users/models"
-	"github.com/johnnrails/ddd_go/with_gin/users/serializers"
+	response "github.com/johnnrails/ddd_go/with_gin/users/response"
 )
 
 type ArticleSerializer struct {
@@ -13,23 +13,22 @@ type ArticleSerializer struct {
 }
 
 type ArticleResponse struct {
-	ID             uint                        `json:"-"`
-	Title          string                      `json:"title"`
-	Slug           string                      `json:"slug"`
-	Description    string                      `json:"description"`
-	Body           string                      `json:"body"`
-	CreatedAt      string                      `json:"createdAt"`
-	UpdatedAt      string                      `json:"updatedAt"`
-	Author         serializers.ProfileResponse `json:"author"`
-	Tags           []string                    `json:"tagList"`
-	Favorite       bool                        `json:"favorited"`
-	FavoritesCount uint                        `json:"favoritesCount"`
+	ID             uint                  `json:"-"`
+	Title          string                `json:"title"`
+	Slug           string                `json:"slug"`
+	Description    string                `json:"description"`
+	Body           string                `json:"body"`
+	CreatedAt      string                `json:"createdAt"`
+	UpdatedAt      string                `json:"updatedAt"`
+	Author         response.UserResponse `json:"author"`
+	Tags           []string              `json:"tagList"`
+	Favorite       bool                  `json:"favorited"`
+	FavoritesCount uint                  `json:"favoritesCount"`
 }
 
 func (s *ArticleSerializer) Response(c *gin.Context) ArticleResponse {
 	userModel := c.MustGet("user_model").(models.UserModel)
-	serializer := AuthorSerializer{s.Author}
-	author := serializer.Response(c)
+	author := response.ToUserResponse(userModel)
 
 	repository := ArticleRepository{
 		DB: common.GetDB(),

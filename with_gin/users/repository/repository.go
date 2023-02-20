@@ -20,8 +20,10 @@ func (ur UserRepository) SaveOne(u models.UserModel) error {
 	return err
 }
 
-func (ur UserRepository) Update(u models.UserModel, data interface{}) error {
-	err := ur.DB.Model(u).Update(data).Error
+func (ur UserRepository) Update(id uint, data interface{}) error {
+	err := ur.DB.Model(&models.UserModel{
+		ID: id,
+	}).Update(data).Error
 	return err
 }
 

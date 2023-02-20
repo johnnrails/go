@@ -10,14 +10,7 @@ import (
 
 func ArticlesRouter(router *gin.RouterGroup) {
 	db := common.GetDB()
-
-	generalRepository := GeneralOperationsRepository{
-		DB: db,
-	}
-
-	articleRepository := ArticleRepository{
-		DB: db,
-	}
+	generalRepository := GeneralOperationsRepository{db}
 
 	router.POST("/", func(ctx *gin.Context) {
 		validator := NewArticleValidator()
@@ -26,7 +19,6 @@ func ArticlesRouter(router *gin.RouterGroup) {
 			ctx.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 			return
 		}
-
 		if err := generalRepository.Insert(&validator.articleModel); err != nil {
 			ctx.JSON(http.StatusUnprocessableEntity, common.NewError("database", err))
 			return
@@ -38,7 +30,9 @@ func ArticlesRouter(router *gin.RouterGroup) {
 
 	router.PUT("/:slug", func(ctx *gin.Context) {
 		slug := ctx.Param("slug")
-		article, err := articleRepository.FindOne(&Article{
+		repo := ArticleRepository{db}
+
+		article, err := repo.FindOne(&Article{
 			Slug: slug,
 		})
 

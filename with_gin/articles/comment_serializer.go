@@ -3,15 +3,15 @@ package articles
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/johnnrails/ddd_go/with_gin/common"
-	"github.com/johnnrails/ddd_go/with_gin/users/serializers"
+	"github.com/johnnrails/ddd_go/with_gin/users/response"
 )
 
 type CommentResponse struct {
-	ID        uint                        `json:"id"`
-	Body      string                      `json:"body"`
-	CreatedAt string                      `json:"createdAt"`
-	UpdatedAt string                      `json:"updatedAt"`
-	Author    serializers.ProfileResponse `json:"author"`
+	ID        uint                  `json:"id"`
+	Body      string                `json:"body"`
+	CreatedAt string                `json:"createdAt"`
+	UpdatedAt string                `json:"updatedAt"`
+	Author    response.UserResponse `json:"author"`
 }
 
 type CommentSerializer struct {
